@@ -1,5 +1,3 @@
-// Aula1.cpp : Este arquivo contém a função 'main'. A execução do programa começa e termina ali.
-//
 #include <ostream>
 #include <iostream>
 #include <exception>
@@ -24,6 +22,9 @@ class IllegalArgumentException : public exception
 
 class String {
     public:
+        /**
+           Cria uma String vazia.   
+        */
         String() {
             characters = new char[1];
 
@@ -32,6 +33,9 @@ class String {
             size = 0;
         }
 
+        /**
+           Cria uma String com um único caractere.
+        */
         String(char c) {
             characters = new char[2];
             
@@ -41,6 +45,9 @@ class String {
             size = 1;
         }
 
+        /**
+           Cria uma String com os caracteres passados.
+        */
         String(const char* cs) {
             char c = cs[0];
             size = 0;
@@ -57,9 +64,6 @@ class String {
 
             characters[size] = '\0';
         }
-
-        friend ostream& operator << (ostream& out, const String& st);
-        friend istream& operator >> (istream& in, const String& st);
 
         String operator + (const char* cs) {
             char c = cs[0];
@@ -150,7 +154,6 @@ class String {
         }
 
         bool operator == (String s) {
-            int size = length();
             if (size != s.length()) {
                 return false;
             }
@@ -165,7 +168,6 @@ class String {
         }
 
         bool operator != (String s) {
-            int size = length();
             if (size != s.length()) {
                 return true;
             }
@@ -195,13 +197,16 @@ class String {
             return this->length() >= s.length();
         }
 
+        /**
+           Retorna a quantidade de caracteres da String.
+        */
         int length() {
             return size;
         }
 
         /**
-            Este método retorna o índice do primeiro local que achar o caractere c.
-            Retorna -1 se não houver o caractere enviado. */
+            Este método retorna o índice do primeiro local onde o caractere c foi encontrado.
+            Retorna -1 se o caractere não for encontrado. */
         int indice(char c) {
             int indice = 0;
             char cAux = this->characters[0];
@@ -216,6 +221,10 @@ class String {
             return indice == size ? -1 : indice;
         }
 
+        /**
+           Modifica os caracteres dentro de intervalo para maiúsculos.
+           Retorna a String com os caracteres modificados.
+        */
         String upcase(int first, int last) {
             validateRange(first, last);
 
@@ -228,6 +237,10 @@ class String {
             return newString;
         }
 
+        /**
+           Modifica os caracteres dentro de intervalo para minúsculos.
+           Retorna a String com os caracteres modificados.
+        */
         String downcase(int first, int last) {
             validateRange(first, last);
 
@@ -240,6 +253,11 @@ class String {
             return newString;
         }
 
+        /**
+           Modifica os caracteres dentro de intervalo para maiúsculos se forem minúsculos
+           e minúsculos para maiúsculos.
+           Retorna a String com os caracteres modificados.
+        */
         String toggleCase(int first, int last) {
             validateRange(first, last);
 
@@ -261,9 +279,10 @@ class String {
             return newString;
         }
 
-        char* characters;
-
+        friend ostream& operator << (ostream& out, const String& st);
+        friend istream& operator >> (istream& in, const String& st);
     private:
+        char* characters;
         int size;
 
         char toLowercase(char c) {
@@ -316,11 +335,11 @@ int main() {
     cout << "[Item A]" << endl << endl;
 
     String a = String();
-    cout << a.characters << endl;
+    cout << a << endl;
     String b = String('a');
-    cout << b.characters << endl;
+    cout << b << endl;
     String c = String("Caio Pinho");
-    cout << c.characters << endl << endl;
+    cout << c << endl << endl;
 
     //Item b
     cout << "[Item B]" << endl << endl;
@@ -328,16 +347,16 @@ int main() {
     String d = "abc";
     String e = String("abc");
     String f = b;
-    cout << f.characters << endl << endl;
+    cout << f << endl << endl;
 
     //Item c
     cout << "[Item C]" << endl << endl;
 
     String g = c + "aaaa";
-    cout << g.characters << endl << endl;
+    cout << g << endl << endl;
 
     String h = g + d + e;
-    cout << g.characters << endl << endl;
+    cout << g << endl << endl;
 
     //Item d
     cout << "[Item D]" << endl << endl;
@@ -345,17 +364,17 @@ int main() {
     String i = "Joao";
     i += " Ferreira";
     i += " da Costa Filho";
-    cout << i.characters << endl << endl;
+    cout << i << endl << endl;
 
     String j = "Senhor ";
     j += i;
-    cout << f.characters << endl << endl;
+    cout << f << endl << endl;
 
     //Item e
     cout << "[Item E]" << endl << endl;
 
-    printf("%s: %d \n", d, d.length());
-    printf("%s: %d \n", i, i.length());
+    cout << d << ": " << d.length() << endl;
+    cout << i << ": " << i.length() << endl;
 
     //Item f
     cout << "[Item F]" << endl << endl;
@@ -368,21 +387,21 @@ int main() {
 
     String l = "UMA frase DOIDA";
     l = l.upcase(0, 15);
-    cout << l.characters << endl << endl;
+    cout << l << endl << endl;
 
     //Item h
     cout << "[Item H]" << endl << endl;
 
     String m = "UMA frase DOIDA";
     m = m.downcase(0, 15);
-    cout << m.characters << endl << endl;
+    cout << m << endl << endl;
 
     //Item i
     cout << "[Item I]" << endl << endl;
 
     String n = "UMA frase DOIDA";
     n = n.toggleCase(0, 15);
-    cout << n.characters << endl << endl;
+    cout << n << endl << endl;
 
     //Item j
     cout << "[Item J]" << endl << endl;
@@ -427,7 +446,7 @@ int main() {
     cout << (quatro >= cinco) << endl;
 
     //Item l
-    cout << "[Item J]" << endl << endl;
+    cout << "[Item l]" << endl << endl;
 
     cout << o << endl;
 
