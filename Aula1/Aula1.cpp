@@ -61,4 +61,9 @@ int main() {
     String c = String("Caio Pinho");
     cout << c.characters;
 
+    //Item b
+    String d = "abc";
+    cout << d.characters;
+
+
 }
