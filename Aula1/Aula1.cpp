@@ -8,18 +8,29 @@ using namespace std;
 class String {
     public:
         String() {
-            *characters = new char[0];
+            characters = new char[0];
         }
 
         String(char c) {
-            *characters = new char[1];
-            *characters[0] = c;
+            characters = new char[1];
+            characters[0] = c;
         }
 
         String(const char* cs) {
-            *characters = cs;
+            char c = cs[0];
+            int size = 0;
 
+            while (c != '\0') {
+                c = cs[++size];
+			}
 
+            characters = new char[size+1];
+            
+            for(int i = 0; i < size; i++) {
+                characters[i] = cs[i];
+			}
+
+            characters[size] = '\0';
         }
 
  //       int length() {
@@ -38,32 +49,16 @@ class String {
 
         //}
 
-        char** characters;
+        char* characters;
 };
 
-int main()
-{
-
+int main() {
 
     //Item a 
 
-    //String a = String();
-    //String b = String('a');
+    String a = String();
+    String b = String('a');
     String c = String("Caio Pinho");
-
-    cout << "\n";
     cout << c.characters;
-    
 
 }
-
-// Executar programa: Ctrl + F5 ou Menu Depurar > Iniciar Sem Depuração
-// Depurar programa: F5 ou menu Depurar > Iniciar Depuração
-
-// Dicas para Começar: 
-//   1. Use a janela do Gerenciador de Soluções para adicionar/gerenciar arquivos
-//   2. Use a janela do Team Explorer para conectar-se ao controle do código-fonte
-//   3. Use a janela de Saída para ver mensagens de saída do build e outras mensagens
-//   4. Use a janela Lista de Erros para exibir erros
-//   5. Ir Para o Projeto > Adicionar Novo Item para criar novos arquivos de código, ou Projeto > Adicionar Item Existente para adicionar arquivos de código existentes ao projeto
-//   6. No futuro, para abrir este projeto novamente, vá para Arquivo > Abrir > Projeto e selecione o arquivo. sln
