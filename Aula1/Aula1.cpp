@@ -85,6 +85,45 @@ class String {
             return *this;
         }
 
+        String operator += (const char* cs) {
+
+            //Calcula o tamanho do array de chars
+            int nSize = 0;
+            char c = cs[0];
+            while (c != '\0') {
+                c = cs[++nSize];
+            }
+
+            //Cria uma copia do array de chars antigo
+            char* copy = new char[size];
+
+            for (int i = 0; i < size; i++) {
+                copy[i] = this->characters[i];
+            }
+
+            //Cria um novo array com o tamanho maior
+            this->characters = new char[size + nSize + 1];
+
+            for (int i = 0; i < size; i++) {
+                this->characters[i] = copy[i];
+            }
+
+            for (int i = 0; i < nSize; i++) {
+                this->characters[size + i] = cs[i];
+            }
+
+            this->characters[size + nSize] = '\0';
+
+            size += nSize;
+
+            return *this;
+        }
+
+        String operator += (String s) {
+            *this += s.characters;
+            return *this;
+        }
+
         String operator = (const char* s) {
             return String(s);
         }
@@ -102,39 +141,41 @@ class String {
 int main() {
 
     //Item a 
+    cout << "[Item A]" << endl << endl;
 
     String a = String();
-    //cout << a.characters << endl;
-
+    cout << a.characters << endl;
     String b = String('a');
     cout << b.characters << endl;
-
     String c = String("Caio Pinho");
+    cout << c.characters << endl << endl;
 
     //Item b
+    cout << "[Item B]" << endl << endl;
+
     String d = "abc";
     String e = String("abc");
     String f = b;
-    cout << f.characters << endl;;
+    cout << f.characters << endl << endl;
 
     //Item c
-    String oi = c + "aaaa";
-    cout << oi.characters << endl;
+    cout << "[Item C]" << endl << endl;
 
-    String g = oi + d + e;
-    cout << g.characters << endl;
+    String g = c + "aaaa";
+    cout << g.characters << endl << endl;
 
-    cout << "\n";
+    String h = g + d + e;
+    cout << g.characters << endl << endl;
 
     //Item d
-    String e = "Joao";
-    e += " Ferreira";
-    e += " da Costa Filho";
-    cout << e.characters;
+    cout << "[Item D]" << endl << endl;
 
-    cout << "\n";
+    String i = "Joao";
+    i += " Ferreira";
+    i += " da Costa Filho";
+    cout << i.characters << endl << endl;
 
-    String f = "Senhor ";
-    f += e;
-    cout << f.characters;
+    String j = "Senhor ";
+    j += i;
+    cout << f.characters << endl << endl;
 }
