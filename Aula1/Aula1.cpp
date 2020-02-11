@@ -58,9 +58,8 @@ class String {
             characters[size] = '\0';
         }
 
- //       int length() {
- //           return characters.size();
- //       }
+        friend ostream& operator << (ostream& out, const String& st);
+        friend istream& operator >> (istream& in, const String& st);
 
         String operator + (const char* cs) {
             char c = cs[0];
@@ -252,6 +251,19 @@ class String {
         }
 };
 
+ostream& operator << (ostream& out, const String& st) {
+    out << st.characters;
+
+    return out;
+}
+
+istream& operator >> (istream& in, const String& c) {
+    cout << "String text: ";
+    in >> c.characters;
+
+    return in;
+}
+
 int main() {
 
     //Item a 
@@ -299,8 +311,6 @@ int main() {
     printf("%s: %d \n", d, d.length());
     printf("%s: %d \n", i, i.length());
 
-
-
     //Item f
     cout << "[Item F]" << endl << endl;
 
@@ -334,4 +344,13 @@ int main() {
     String o = "Testando isso aqui";
     char ch = o[9];
     cout << ch << endl << endl;
+
+    //Item l
+    cout << "[Item J]" << endl << endl;
+
+    cout << o << endl;
+
+    String z;
+    cin >> z;
+    cout << z<< endl;
 }
