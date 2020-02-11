@@ -149,6 +149,52 @@ class String {
             return this->characters[index];
         }
 
+        bool operator == (String s) {
+            int size = length();
+            if (size != s.length()) {
+                return false;
+            }
+
+            for (int i = 0; i < size; i++) {
+                if (this->characters[i] != s.characters[i]) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        bool operator != (String s) {
+            int size = length();
+            if (size != s.length()) {
+                return true;
+            }
+
+            for (int i = 0; i < size; i++) {
+                if (this->characters[i] != s.characters[i]) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        bool operator > (String s) {
+            return this->length() > s.length();
+        }
+
+        bool operator < (String s) {
+            return this->length() < s.length();
+        }
+
+        bool operator <= (String s) {
+            return this->length() <= s.length();
+        }
+
+        bool operator >= (String s) {
+            return this->length() >= s.length();
+        }
+
         int length() {
             return size;
         }
@@ -344,6 +390,41 @@ int main() {
     String o = "Testando isso aqui";
     char ch = o[9];
     cout << ch << endl << endl;
+
+    //Item K
+    cout << "[Item K]" << endl << endl;
+
+    String um = "Joao";
+    String dois = "Joao";
+    String tres = "Caio";
+    String quatro = "Uma String";
+    String cinco = "Uma String maior";
+
+    cout << "operator [==]" << endl << endl;
+    
+    cout << (um == dois) << endl;
+    cout << (dois == tres) << endl << endl;
+
+    cout << "operator [!=]" << endl << endl;
+
+    cout << (um != dois) << endl;
+    cout << (dois != tres) << endl << endl;
+
+    cout << "operator [>]" << endl << endl;
+
+    cout << (quatro > cinco) << endl;
+
+    cout << "operator [<]" << endl << endl;
+
+    cout << (quatro < cinco) << endl;
+
+    cout << "operator [<=]" << endl << endl;
+
+    cout << (quatro <= cinco) << endl;
+
+    cout << "operator [>=]" << endl << endl;
+
+    cout << (quatro >= cinco) << endl;
 
     //Item l
     cout << "[Item J]" << endl << endl;
