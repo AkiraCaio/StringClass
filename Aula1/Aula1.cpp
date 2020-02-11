@@ -2,9 +2,26 @@
 //
 #include <ostream>
 #include <iostream>
+#include <exception>
+
 using namespace std;
 
-//A classe vai implementar o metodo + (com override) e vai falar o que a classe vai fazer
+class ArrayOutOfBoundsException : public exception
+{
+    virtual const char* what() const throw()
+    {
+        return "Array out of bounds.";
+    }
+};
+
+class IllegalArgumentException : public exception
+{
+    virtual const char* what() const throw()
+    {
+        return "There are illegal or inappropriate arguments.";
+    }
+};
+
 class String {
     public:
         String() {
@@ -128,6 +145,11 @@ class String {
             return String(s);
         }
 
+        unsigned char operator [](int index) {
+
+            return this->characters[index];
+        }
+
         /**
             Este método retorna o índice do primeiro local que achar o caractere c.
             Retorna -1 se não houver o caractere enviado. */
@@ -145,7 +167,21 @@ class String {
             return indice == size ? -1 : indice;
         }
 
+        String upcase(int first, int last) {
+            validateRange(first, last);
+
+            String newString = this->characters;
+
+            for (int i = first; i < last; i++) {
+                newString.characters[i] = toUppercase(this->characters[i]);
+            }
+
+            return newString;
+        }
+
         String downcase(int first, int last) {
+            validateRange(first, last);
+
             String newString = this->characters;
 
             for (int i = first; i < last; i++) {
@@ -156,6 +192,8 @@ class String {
         }
 
         String toggleCase(int first, int last) {
+            validateRange(first, last);
+
             String newString = this->characters;
 
             for (int i = first; i < last; i++) {
@@ -197,6 +235,16 @@ class String {
             int ascii = (int)c;
 
             return ascii >= 65 && ascii <= 90;
+        }
+
+        void validateRange(int first, int last) {
+            if (first < 0 || first > size || last > size || last < 0) {
+                throw ArrayOutOfBoundsException();
+            }
+
+            if (first >= last) {
+                throw IllegalArgumentException();
+            }
         }
 };
 
@@ -251,13 +299,27 @@ int main() {
     cout << "[Item G]" << endl << endl;
 
     String l = "UMA frase DOIDA";
-    l = l.downcase(0, 15);
+    l = l.upcase(0, 15);
     cout << l.characters << endl << endl;
 
     //Item h
     cout << "[Item H]" << endl << endl;
 
     String m = "UMA frase DOIDA";
-    m = m.toggleCase(0, 15);
+    m = m.downcase(0, 15);
     cout << m.characters << endl << endl;
+
+    //Item i
+    cout << "[Item I]" << endl << endl;
+
+    String n = "UMA frase DOIDA";
+    n = n.toggleCase(0, 15);
+    cout << n.characters << endl << endl;
+
+    //Item j
+    cout << "[Item J]" << endl << endl;
+
+    String o = "Testando isso aqui";
+    char ch = o[9];
+    cout << ch << endl << endl;
 }
