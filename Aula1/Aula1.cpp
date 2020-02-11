@@ -132,6 +132,10 @@ class String {
 
         //}
 
+        int length() {
+            return size;
+        }
+
         char* characters;
 
     private:
@@ -178,4 +182,12 @@ int main() {
     String j = "Senhor ";
     j += i;
     cout << f.characters << endl << endl;
+
+    //Item e
+    cout << "[Item E]" << endl << endl;
+
+    printf("%s: %d \n", d, d.length());
+    printf("%s: %d \n", i, i.length());
+
+
 }
