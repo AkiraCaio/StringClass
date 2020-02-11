@@ -2,9 +2,26 @@
 //
 #include <ostream>
 #include <iostream>
+#include <exception>
+
 using namespace std;
 
-//A classe vai implementar o metodo + (com override) e vai falar o que a classe vai fazer
+class ArrayOutOfBoundsException : public exception
+{
+    virtual const char* what() const throw()
+    {
+        return "Array out of bounds.";
+    }
+};
+
+class IllegalArgumentException : public exception
+{
+    virtual const char* what() const throw()
+    {
+        return "There are illegal or inappropriate arguments.";
+    }
+};
+
 class String {
     public:
         String() {
@@ -128,18 +145,111 @@ class String {
             return String(s);
         }
 
-        //ostream& operator <<(String const& v) {
+        unsigned char operator [](int index) {
 
-        //}
+            return this->characters[index];
+        }
 
         int length() {
             return size;
+        }
+
+        /**
+            Este método retorna o índice do primeiro local que achar o caractere c.
+            Retorna -1 se não houver o caractere enviado. */
+        int indice(char c) {
+            int indice = 0;
+            char cAux = this->characters[0];
+
+            while (cAux != '\0') {
+                if (cAux == c) {
+                    break;
+                }
+                cAux = this->characters[++indice];
+            }
+
+            return indice == size ? -1 : indice;
+        }
+
+        String upcase(int first, int last) {
+            validateRange(first, last);
+
+            String newString = this->characters;
+
+            for (int i = first; i < last; i++) {
+                newString.characters[i] = toUppercase(this->characters[i]);
+            }
+
+            return newString;
+        }
+
+        String downcase(int first, int last) {
+            validateRange(first, last);
+
+            String newString = this->characters;
+
+            for (int i = first; i < last; i++) {
+                newString.characters[i] = toLowercase(this->characters[i]);
+            }
+
+            return newString;
+        }
+
+        String toggleCase(int first, int last) {
+            validateRange(first, last);
+
+            String newString = this->characters;
+
+            for (int i = first; i < last; i++) {
+                char c = newString.characters[i];
+
+                if (isLowercase(c)) {
+                    newString.characters[i] = toUppercase(c);
+                    continue;
+                }
+                
+                if (isUppercase(c)) {
+                    newString.characters[i] = toLowercase(c);
+                }
+            }
+
+            return newString;
         }
 
         char* characters;
 
     private:
         int size;
+
+        char toLowercase(char c) {
+            return isUppercase(c) ? ((int)c + 32) : c;
+        }
+
+        char toUppercase(char c) {
+            return isLowercase(c) ? ((int)c - 32) : c;
+        }
+
+        bool isLowercase(char c) {
+            int ascii = (int)c;
+
+            return ascii >= 97 && ascii <= 122;
+        }
+
+        bool isUppercase(char c) {
+            int ascii = (int)c;
+
+            return ascii >= 65 && ascii <= 90;
+        }
+
+        void validateRange(int first, int last) {
+            if (first < 0 || first > size || last > size || last < 0) {
+                throw ArrayOutOfBoundsException();
+            }
+
+            if (first >= last) {
+                throw IllegalArgumentException();
+            }
+        }
 };
 
 int main() {
@@ -190,4 +300,38 @@ int main() {
     printf("%s: %d \n", i, i.length());
 
 
+
+    //Item f
+    cout << "[Item F]" << endl << endl;
+
+    String k = "Uma frase para testar";
+    cout << k.indice('z') << endl << endl;
+
+    //Item g
+    cout << "[Item G]" << endl << endl;
+
+    String l = "UMA frase DOIDA";
+    l = l.upcase(0, 15);
+    cout << l.characters << endl << endl;
+
+    //Item h
+    cout << "[Item H]" << endl << endl;
+
+    String m = "UMA frase DOIDA";
+    m = m.downcase(0, 15);
+    cout << m.characters << endl << endl;
+
+    //Item i
+    cout << "[Item I]" << endl << endl;
+
+    String n = "UMA frase DOIDA";
+    n = n.toggleCase(0, 15);
+    cout << n.characters << endl << endl;
+
+    //Item j
+    cout << "[Item J]" << endl << endl;
+
+    String o = "Testando isso aqui";
+    char ch = o[9];
+    cout << ch << endl << endl;
 }
