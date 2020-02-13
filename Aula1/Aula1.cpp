@@ -105,6 +105,7 @@ class String {
             return *this;
         }
 
+        //TODO: A cadeia de caracteres interna tem que ser IMUTAVEL. Então, pega-se as duas cadeias de string, une elas, deleta a instancia da string antiga e, entao, cria-se uma nova com a nova cadeia.
         String operator += (const char* cs) {
 
             //Calcula o tamanho do array de chars
@@ -144,27 +145,13 @@ class String {
             return *this;
         }
 
-        String operator = (const char* s) {
-            return String(s);
+        String* operator = (const char* s) {
+            return new String(s);
         }
 
         unsigned char operator [](int index) {
 
             return this->characters[index];
-        }
-
-        bool operator == (String s) {
-            if (size != s.length()) {
-                return false;
-            }
-
-            for (int i = 0; i < size; i++) {
-                if (this->characters[i] != s.characters[i]) {
-                    return false;
-                }
-            }
-
-            return true;
         }
 
         bool operator != (String s) {
@@ -181,20 +168,69 @@ class String {
             return false;
         }
 
+        //"ab" > "a"
         bool operator > (String s) {
-            return this->length() > s.length();
+            bool isBigger = length() > s.length();
+            
+            for (int i = 0; i < (isBigger ? s.length() : length()); i++) {
+                if (this->characters[i] < s[i]) {
+                    return false;
+                }
+
+                if (this->characters[i] > s[i]) {
+                    return true;
+                }
+            }
+
+            return isBigger;
         }
 
         bool operator < (String s) {
-            return this->length() < s.length();
+            bool isSmaller = length() < s.length();
+
+            for (int i = 0; i < (isSmaller ? length() : s.length()); i++) {
+                if (this->characters[i] < s[i]) {
+                    return true;
+                }
+
+                if (this->characters[i] > s[i]) {
+                    return false;
+                }
+            }
+
+            return isSmaller;
         }
 
         bool operator <= (String s) {
-            return this->length() <= s.length();
+            bool isSmallerOrEqual = length() <= s.length();
+
+            for (int i = 0; i < (isSmallerOrEqual ? length() : s.length()); i++) {
+                if (this->characters[i] < s[i]) {
+                    return true;
+                }
+
+                if (this->characters[i] > s[i]) {
+                    return false;
+                }
+            }
+
+            return isSmallerOrEqual;
         }
 
         bool operator >= (String s) {
-            return this->length() >= s.length();
+            bool isBiggerOrEqual = length() >= s.length();
+
+            for (int i = 0; i < (isBiggerOrEqual ? s.length() : length()); i++) {
+                if (this->characters[i] < s[i]) {
+                    return false;
+                }
+
+                if (this->characters[i] > s[i]) {
+                    return true;
+                }
+            }
+
+            return isBiggerOrEqual;
         }
 
         /**
@@ -279,6 +315,20 @@ class String {
             return newString;
         }
 
+        bool equals(String s) {
+            if (size != s.length()) {
+                return false;
+            }
+
+            for (int i = 0; i < size; i++) {
+                if (this->characters[i] != s.characters[i]) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         friend ostream& operator << (ostream& out, const String& st);
         friend istream& operator >> (istream& in, const String& st);
     private:
@@ -331,6 +381,13 @@ istream& operator >> (istream& in, const String& c) {
 
 int main() {
 
+    String t1 = "dbcd";
+    String t2 = "cbcd";
+    cout << (t1 > t2) << endl;
+    cout << (t1 < t2) << endl;
+    cout << (t1 >= t2) << endl;
+    cout << (t1 <= t2) << endl;
+
     //Item a 
     cout << "[Item A]" << endl << endl;
 
@@ -356,7 +413,7 @@ int main() {
     cout << g << endl << endl;
 
     String h = g + d + e;
-    cout << g << endl << endl;
+    cout << h << endl << endl;
 
     //Item d
     cout << "[Item D]" << endl << endl;
