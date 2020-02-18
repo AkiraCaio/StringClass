@@ -48,13 +48,8 @@ class String {
         /**
            Cria uma String com os caracteres passados.
         */
-        String(const char* cs) {
-            char c = cs[0];
-            size = 0;
-
-            while (c != '\0') {
-                c = cs[++size];
-			}
+        String(const char* cs) { 
+            size = length(cs);
 
             characters = new char[size + 1];
             
@@ -65,92 +60,51 @@ class String {
             characters[size] = '\0';
         }
 
-        String operator + (const char* cs) {
-            char c = cs[0];
-            int sizeCs = 0;
+        ~String() {
 
-            while (c != '\0') {
-                c = cs[++sizeCs];
-            }
-
-            //Criando o array copia com o tamanho atualizado
-            char* newArray = new char[size + sizeCs + 1];
-
-            //Copiando os valores ja existentes pro array copia
-            for (int i = 0; i < size; i++){
-                newArray[i] = characters[i];
-            }
-
-            //Introduzindo os novos valores no fim do vetor
-            for (int i = 0; i < sizeCs; i++) {
-                newArray[size + i] = cs[i];
-            }
-
-            //Atualizando os valores da classe
-            size += sizeCs;
-
-            characters = new char[size + 1];
-
-            for (int i = 0; i < size; i++) {
-                characters[i] = newArray[i];
-            }
-
-            characters[size] = '\0';
-
-            return *this;
         }
 
-        String operator + (String cs) {
-            *this = *this + cs.characters;
-            return *this;
+        String* operator + (const char* cs) {
+            return new String(concat(this->characters, cs));
         }
 
-        //TODO: A cadeia de caracteres interna tem que ser IMUTAVEL. Então, pega-se as duas cadeias de string, une elas, deleta a instancia da string antiga e, entao, cria-se uma nova com a nova cadeia.
-        String operator += (const char* cs) {
-
-            //Calcula o tamanho do array de chars
-            int nSize = 0;
-            char c = cs[0];
-            while (c != '\0') {
-                c = cs[++nSize];
-            }
-
-            //Cria uma copia do array de chars antigo
-            char* copy = new char[size];
-
-            for (int i = 0; i < size; i++) {
-                copy[i] = this->characters[i];
-            }
-
-            //Cria um novo array com o tamanho maior
-            this->characters = new char[size + nSize + 1];
-
-            for (int i = 0; i < size; i++) {
-                this->characters[i] = copy[i];
-            }
-
-            for (int i = 0; i < nSize; i++) {
-                this->characters[size + i] = cs[i];
-            }
-
-            this->characters[size + nSize] = '\0';
-
-            size += nSize;
-
-            return *this;
+        String* operator + (String s) {
+            return new String(concat(this->characters, s.characters));
         }
 
-        String operator += (String s) {
-            *this += s.characters;
-            return *this;
+        String* operator + (String* s) {
+            return new String(concat(this->characters, s->characters));
+        }
+
+        friend auto operator + (String* a, String& b)-> String* {
+            return new String(concat(a->characters, b.characters));
+        }
+
+        String* operator += (const char* cs) {
+            return new String(concat(this->characters, cs));
+        }
+
+        String* operator += (String s) {
+            return new String(concat(this->characters, s.characters));
         }
 
         String* operator = (const char* s) {
             return new String(s);
         }
 
-        unsigned char operator [](int index) {
+        String* operator = (String* s) {
+            return new String(s->characters);
+        }
 
+        String* operator = (String s) {
+            return new String(s);
+        }
+
+        String* operator = (String& s) {
+            return new String(s);
+        }
+
+        unsigned char operator [](int index) {
             return this->characters[index];
         }
 
@@ -242,7 +196,8 @@ class String {
 
         /**
             Este método retorna o índice do primeiro local onde o caractere c foi encontrado.
-            Retorna -1 se o caractere não for encontrado. */
+            Retorna -1 se o caractere não for encontrado.
+        */
         int indice(char c) {
             int indice = 0;
             char cAux = this->characters[0];
@@ -330,10 +285,45 @@ class String {
         }
 
         friend ostream& operator << (ostream& out, const String& st);
+        friend ostream& operator << (ostream& out, const String& st);
         friend istream& operator >> (istream& in, const String& st);
     private:
         char* characters;
         int size;
+
+        static int length(const char* a) {
+            int size = 0;
+            char c = a[0];
+
+            while (c != '\0') {
+                c = a[++size];
+            }
+
+            return size;
+        }
+
+        static const char* concat(const char* a, const char* b) {
+           
+            int aSize = length(a);
+            int bSize = length(b);
+
+            //Criando o array copia com o tamanho atualizado
+            char* newCharArray = new char[aSize + bSize + 1];
+
+            //Copiando os valores ja existentes pro array copia
+            for (int i = 0; i < aSize; i++) {
+                newCharArray[i] = a[i];
+            }
+
+            //Introduzindo os novos valores no fim do vetor
+            for (int i = 0; i < bSize; i++) {
+                newCharArray[aSize + i] = b[i];
+            }
+
+            newCharArray[aSize + bSize] = '\0';
+
+            return newCharArray;
+        }
 
         char toLowercase(char c) {
             return isUppercase(c) ? ((int)c + 32) : c;
@@ -383,6 +373,7 @@ int main() {
 
     String t1 = "dbcd";
     String t2 = "cbcd";
+
     cout << (t1 > t2) << endl;
     cout << (t1 < t2) << endl;
     cout << (t1 >= t2) << endl;
@@ -391,11 +382,11 @@ int main() {
     //Item a 
     cout << "[Item A]" << endl << endl;
 
-    String a = String();
+    String* a = new String();
     cout << a << endl;
-    String b = String('a');
+    String* b = new String('a');
     cout << b << endl;
-    String c = String("Caio Pinho");
+    String* c = new String("Caio Pinho");
     cout << c << endl << endl;
 
     //Item b
@@ -403,16 +394,16 @@ int main() {
 
     String d = "abc";
     String e = String("abc");
-    String f = b;
+    String* f = &d;
     cout << f << endl << endl;
 
     //Item c
     cout << "[Item C]" << endl << endl;
 
-    String g = c + "aaaa";
+    String* g = *c + "aaaa";
     cout << g << endl << endl;
 
-    String h = g + d + e;
+    String* h = g + d + e;
     cout << h << endl << endl;
 
     //Item d
@@ -478,8 +469,8 @@ int main() {
 
     cout << "operator [==]" << endl << endl;
     
-    cout << (um == dois) << endl;
-    cout << (dois == tres) << endl << endl;
+    //cout << (um == dois) << endl;
+    //cout << (dois == tres) << endl << endl;
 
     cout << "operator [!=]" << endl << endl;
 
